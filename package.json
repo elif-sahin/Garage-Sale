@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "events": "^3.0.0",
+    "native-base": "^2.13.4",
     "react": "16.8.6",
     "react-native": "0.60.4",
     "react-native-anchor-carousel": "^2.2.0",
