@@ -1,5 +1,5 @@
 import React, { Component, useRef } from 'react';
-import { Text, FlatList, View, StyleSheet, Animated, TouchableOpacity } from 'react-native';
+import { Text, FlatList, View, StyleSheet, Animated, TouchableHighlight } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import Modalize from 'react-native-modalize';
 import Item from './src/GarageCarousel.js';
@@ -40,6 +40,10 @@ export default class GarageMap extends Component {
     this.state = {
       markers,
     };
+
+  }
+  goMarker = (key) => {
+    EventEmitter.emit('goMarker', key);
   }
 
   componentDidMount() {
@@ -55,6 +59,7 @@ export default class GarageMap extends Component {
       });
 
     })
+
     console.log("event emdid mount sont");
   }
 
@@ -69,9 +74,12 @@ export default class GarageMap extends Component {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
+
           style={{
             ...StyleSheet.absoluteFillObject,
+            zIndex: 0,
           }}
+
         >
           {this.state.markers.map(elm => {
             return <Marker.Animated
@@ -80,7 +88,14 @@ export default class GarageMap extends Component {
                 longitude: elm.longitude,
                 latitude: elm.latitude
               }}
-            />
+              onPress={() => this.goMarker(elm.key)}
+            >
+              <MapView.Callout tooltip style={styles.customView}>
+                <View style={styles.calloutText}>
+                  <Text>{elm.key}{"\n"}</Text>
+                </View>
+              </MapView.Callout>
+            </Marker.Animated>
           })}
         </MapView>
         <Item markers={this.state.markers}></Item>

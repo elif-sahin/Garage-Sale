@@ -7,6 +7,7 @@ import { Body, Card, CardItem, Header, Left, Thumbnail, Title } from 'native-bas
 
 const swidth = Dimensions.get('window').width;
 const sheight = Dimensions.get('window').height;
+let carousel = null;
 export default class Item extends Component {
 
   constructor(props) {
@@ -15,41 +16,39 @@ export default class Item extends Component {
   }
 
   scrollY = new Animated.Value(0)
-
-
-  //headerY = Animated.multiply(Animated.diffClamp(this.scroll, 0, 56), -1)
+  //headerY = Animated.multiply(Animated.diffClamp(this.scrollY, 0, 56), -1)
 
   selectMarker = (item) => {
     EventEmitter.emit('selectMarker', item);
+
+  }
+  componentDidMount() {
+
+    EventEmitter.on('goMarker', function (key) {
+
+      console.log("this.map: ", key);
+      carousel.snapToItem(key - 1, animated = true, fireCallback = true);
+
+    })
+
+    console.log("event emdid mount sont");
   }
 
   renderItem = ({ item, index }) => {
+    // animasyon :style={{ backgrounColor: "red", height: sheight * 0.3, marginTop: sheight - sheight * 0.3 }}
     return (
-      /*
-      <TouchableOpacity style={[styles.item]}
-        onPress={() => {
-          this.selectMarker(index)
-        }}
-      >
-        <Text style={styles.text}>{item.key}</Text>
-      </TouchableOpacity>
-      */
 
-      <View style={StyleSheet.absoluteFill}>
+      < View >
 
         <Animated.ScrollView scrollEventThrottle={5}
           showsVerticalScrollIndicator={false}
-          style={{ zIndex: 0 }}
+          style={{ zIndex: -1 }}
           onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: this.scrollY } } }], { useNativeDriver: true })}>
-
 
           <Animated.View style={{
             height: sheight * 0.8,
-
             transform: [{ translateY: Animated.multiply(this.scrollY, 0.5) }]
           }}>
-
-
 
           </Animated.View>
           <TouchableOpacity
@@ -57,13 +56,14 @@ export default class Item extends Component {
               this.selectMarker(index)
             }}
           >
-            <View style={[styles.item]}>
-              <Text style={styles.text}>{item.key}  Uzunca bir açıklama yazısı. Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.</Text>
-            </View>
+            <Animated.View style={{ ...styles.item }} >
+              <Text style={styles.text}>{item.key}  </Text>
+              <Text>Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı. Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.</Text>
+            </Animated.View>
           </TouchableOpacity>
-          <View style={{ position: 'absolute', height: sheight * 2, width: swidth, zIndex: -1 }}>
+          <View style={{ position: 'absolute', height: sheight, width: swidth, zIndex: -2 }}>
             <LinearGradient
-              colors={['rgba(245,245,245,0.0)', 'rgba(245,245,245,0.35)', 'rgba(245,245,245,1)']}
+              colors={['rgba(245,245,245,0)', 'rgba(245,245,245,0.35)', 'rgba(245,245,245,1)']}
               locations={[0, 0.3, 1]}
               style={StyleSheet.absoluteFill} />
           </View>
@@ -74,39 +74,41 @@ export default class Item extends Component {
 
             backgroundColor: 'transparent'
           }}>
-            <View style={{ ...StyleSheet.absoluteFillObject, top: 100, backgroundColor: 'rgb(245,245,245)' }} />
+            <View style={{ ...StyleSheet.absoluteFill, top: 100, backgroundColor: 'rgb(245,245,245)' }} />
 
           </View>
         </Animated.ScrollView>
 
-      </View>
+      </View >
 
     )
   };
 
   render() {
-
     return (
-      <View>
-        <View>
 
-          <Carousel
-            ref={(c) => {
-              this._carousel = c;
-            }}
-            style={styles.carousel}
-            data={this.props.markers}
-            renderItem={this.renderItem}
-            itemWidth={swidth}
-            sliderWidth={swidth}
-            containerWidth={swidth}
-            separatorWidth={20}
-            onSnapToItem={(index) => {
-              this.selectMarker(index)
-            }}
-          />
-        </View>
+      <View style={{ height: sheight * 0.3, marginTop: sheight - sheight * 0.3 }}>
+
+        <Carousel
+          ref={(c) => {
+            carousel = c;
+          }}
+          style={styles.carousel}
+          data={this.props.markers}
+          renderItem={this.renderItem}
+          itemWidth={swidth}
+
+          sliderWidth={swidth}
+          containerWidth={swidth}
+          separatorWidth={20}
+          onSnapToItem={(index) => {
+            this.selectMarker(index)
+          }}
+
+        />
+
       </View>
+
     );
   }
 }
@@ -128,13 +130,17 @@ const styles = StyleSheet.create({
 
   carousel: {
     flex: 1,
-
+    backgroundColor: "red"
   },
 
   item: {
-    backgroundColor: "orange",
+    backgroundColor: 'rgb(245,245,245)',
     width: swidth * 0.7,
-    marginLeft: swidth * 0.15
+
+    marginLeft: swidth * 0.15,
+    marginTop: -sheight * 0.7,
+
+
 
   },
   carouselContainer: {
