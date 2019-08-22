@@ -42,16 +42,18 @@ export default class Item extends Component {
         even={(index + 1) % 2 === 0}
         parallax={true}
         parallaxProps={parallaxProps}
-      />
+      >
+
+      </SliderEntry>
     );
   }
   mainExample() {
 
     const { slider1ActiveSlide } = this.state;
     return (
-      <View style={styles.exampleContainer}>
-        <Text style={styles.title}>{`Example`}</Text>
-        <Text style={styles.subtitle}>at</Text>
+      <View >
+        <View style={styles.title}></View>
+
         <Carousel
           ref={c => carousel = c}
           data={this.props.markers}

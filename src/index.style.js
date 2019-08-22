@@ -23,43 +23,32 @@ export default StyleSheet.create({
         flex: 1
     },
     exampleContainer: {
-        paddingVertical: 30
+        paddingVertical: 195,
+
     },
     exampleContainerDark: {
         backgroundColor: colors.black
     },
-    exampleContainerLight: {
-        backgroundColor: 'white'
-    },
+
     title: {
-        paddingHorizontal: 30,
-        backgroundColor: 'transparent',
-        color: 'rgba(255, 255, 255, 0.9)',
-        fontSize: 20,
-        fontWeight: 'bold',
-        textAlign: 'center'
+        marginTop: 410,
+
     },
     titleDark: {
         color: colors.black
     },
-    subtitle: {
-        marginTop: 5,
-        paddingHorizontal: 30,
-        backgroundColor: 'transparent',
-        color: 'rgba(255, 255, 255, 0.75)',
-        fontSize: 13,
-        fontStyle: 'italic',
-        textAlign: 'center'
-    },
+
     slider: {
-        marginTop: 15,
+        marginTop: 65,
         overflow: 'visible' // for custom animations
     },
     sliderContentContainer: {
-        paddingVertical: 10 // for custom animation
+        paddingVertical: 2,// 
+
     },
     paginationContainer: {
-        paddingVertical: 8
+        paddingVertical: 8,
+
     },
     paginationDot: {
         width: 8,

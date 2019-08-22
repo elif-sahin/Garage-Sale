@@ -18,7 +18,7 @@ export default class SliderEntry extends Component {
 
         return parallax ? (
             <ParallaxImage
-                source={{ uri: illustration }}
+                source={require('../images/illustration.png')}
                 containerStyle={[styles.imageContainer, even ? styles.imageContainerEven : {}]}
                 style={styles.image}
                 parallaxFactor={0.35}
@@ -28,21 +28,21 @@ export default class SliderEntry extends Component {
             />
         ) : (
                 <Image
-                    source={{ uri: illustration }}
+                    source={require('../images/illustration.png')}
                     style={styles.image}
                 />
             );
     }
 
     render() {
-        const { data: { title, subtitle }, even } = this.props;
+        const { data: { key, latitude, longitude }, even } = this.props;
 
-        const uppercaseTitle = title ? (
+        const uppercaseTitle = key ? (
             <Text
                 style={[styles.title, even ? styles.titleEven : {}]}
                 numberOfLines={2}
             >
-                {title.toUpperCase()}
+                {key}
             </Text>
         ) : false;
 
@@ -50,7 +50,7 @@ export default class SliderEntry extends Component {
             <TouchableOpacity
                 activeOpacity={1}
                 style={styles.slideInnerContainer}
-                onPress={() => { alert(`You've clicked '${title}'`); }}
+                onPress={() => { alert(`You've clicked '${key}'`); }}
             >
                 <View style={styles.shadow} />
                 <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
@@ -63,7 +63,7 @@ export default class SliderEntry extends Component {
                         style={[styles.subtitle, even ? styles.subtitleEven : {}]}
                         numberOfLines={2}
                     >
-                        {subtitle}
+                        {latitude}, {longitude}
                     </Text>
                 </View>
             </TouchableOpacity>
