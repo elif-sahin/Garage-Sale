@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
-import { Text, View, FlatList, StyleSheet, Animated, TouchableOpacity, Dimensions } from 'react-native';
+import { Text, View, FlatList, StyleSheet, Animated, TouchableOpacity, Dimensions, Platform, ScrollView, StatusBar, SafeAreaView } from 'react-native';
 import EventEmitter from "./EventEmitter"
-import Carousel from 'react-native-snap-carousel';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient'
 import { Body, Card, CardItem, Header, Left, Thumbnail, Title } from 'native-base'
+import { sliderWidth, itemWidth } from './SliderEntry.style';
+import SliderEntry from './SliderEntry';
+import styles, { colors } from './index.style';
+import { ENTRIES1, ENTRIES2 } from './entries';
+import { scrollInterpolators, animatedStyles } from './animations';
 
 const swidth = Dimensions.get('window').width;
 const sheight = Dimensions.get('window').height;
 let carousel = null;
+const SLIDER_1_FIRST_ITEM = 1;
 export default class Item extends Component {
 
   constructor(props) {
     super(props);
-    this.states = { selectedMarker: 0 };
+    this.state = { selectedMarker: 0, slider1ActiveSlide: SLIDER_1_FIRST_ITEM };
+
   }
 
   scrollY = new Animated.Value(0)
@@ -20,22 +27,68 @@ export default class Item extends Component {
 
   selectMarker = (item) => {
     EventEmitter.emit('selectMarker', item);
-
   }
   componentDidMount() {
-
     EventEmitter.on('goMarker', function (key) {
-
       console.log("this.map: ", key);
       carousel.snapToItem(key - 1, animated = true, fireCallback = true);
-
     })
+  }
 
-    console.log("event emdid mount sont");
+  _renderItemWithParallax({ item, index }, parallaxProps) {
+    return (
+      <SliderEntry
+        data={item}
+        even={(index + 1) % 2 === 0}
+        parallax={true}
+        parallaxProps={parallaxProps}
+      />
+    );
+  }
+  mainExample() {
+
+    const { slider1ActiveSlide } = this.state;
+    return (
+      <View style={styles.exampleContainer}>
+        <Text style={styles.title}>{`Example`}</Text>
+        <Text style={styles.subtitle}>at</Text>
+        <Carousel
+          ref={c => carousel = c}
+          data={this.props.markers}
+          renderItem={this._renderItemWithParallax}
+          sliderWidth={sliderWidth}
+          itemWidth={itemWidth}
+          hasParallaxImages={true}
+          firstItem={SLIDER_1_FIRST_ITEM}
+          inactiveSlideScale={0.94}
+          inactiveSlideOpacity={0.7}
+          // inactiveSlideShift={20}
+          containerCustomStyle={styles.slider}
+          contentContainerCustomStyle={styles.sliderContentContainer}
+          loop={true}
+          loopClonesPerSide={2}
+          onSnapToItem={(index) => {
+            this.selectMarker(index);
+            this.setState({ slider1ActiveSlide: index });
+          }}
+        />
+        <Pagination
+          dotsLength={this.props.markers.length}
+          activeDotIndex={slider1ActiveSlide}
+          containerStyle={styles.paginationContainer}
+          dotColor={'rgba(255, 255, 255, 0.92)'}
+          dotStyle={styles.paginationDot}
+          inactiveDotColor={colors.black}
+          inactiveDotOpacity={0.4}
+          inactiveDotScale={0.6}
+          carouselRef={carousel}
+          tappableDots={!!carousel}
+        />
+      </View>
+    );
   }
 
   renderItem = ({ item, index }) => {
-    // animasyon :style={{ backgrounColor: "red", height: sheight * 0.3, marginTop: sheight - sheight * 0.3 }}
     return (
 
       < View >
@@ -83,75 +136,13 @@ export default class Item extends Component {
 
     )
   };
-
   render() {
+    const example1 = this.mainExample(1, ' dots');
     return (
-
-      <View style={{ height: sheight * 0.3, marginTop: sheight - sheight * 0.3 }}>
-
-        <Carousel
-          ref={(c) => {
-            carousel = c;
-          }}
-          style={styles.carousel}
-          data={this.props.markers}
-          renderItem={this.renderItem}
-          itemWidth={swidth}
-
-          sliderWidth={swidth}
-          containerWidth={swidth}
-          separatorWidth={20}
-          onSnapToItem={(index) => {
-            this.selectMarker(index)
-          }}
-
-        />
-
+      <View>
+        {example1}
       </View>
-
     );
   }
 }
-const styles = StyleSheet.create({
-  flatList: {
-    height: 200,
-    marginTop: 575,
-  },
-
-  listItem: {
-    flexDirection: "row",
-    paddingLeft: 20,
-
-  },
-
-  container: {
-    paddingHorizontal: 200
-  },
-
-  carousel: {
-    flex: 1,
-    backgroundColor: "red"
-  },
-
-  item: {
-    backgroundColor: 'rgb(245,245,245)',
-    width: swidth * 0.7,
-
-    marginLeft: swidth * 0.15,
-    marginTop: -sheight * 0.7,
-
-
-
-  },
-  carouselContainer: {
-    height: 200,
-    marginTop: sheight - 100
-  },
-
-  text: {
-    fontSize: 100,
-    fontWeight: 'bold',
-    color: "purple"
-  }
-});
 

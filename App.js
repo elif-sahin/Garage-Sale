@@ -46,6 +46,8 @@ export default class GarageMap extends Component {
     EventEmitter.emit('goMarker', key);
   }
 
+
+
   componentDidMount() {
     console.log("did mounth bas calisti");
     EventEmitter.on('selectMarker', function (selectMarker) {
