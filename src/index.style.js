@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 export const colors = {
     black: '#1a1917',
@@ -6,6 +6,9 @@ export const colors = {
     background1: '#B721FF',
     background2: '#21D4FD'
 };
+
+const swidth = Dimensions.get('window').width;
+const sheight = Dimensions.get('window').height;
 
 export default StyleSheet.create({
     safeArea: {
@@ -23,7 +26,8 @@ export default StyleSheet.create({
         flex: 1
     },
     exampleContainer: {
-        paddingVertical: 195,
+        paddingVertical: sheight * 0.25,
+
 
     },
     exampleContainerDark: {
@@ -31,7 +35,8 @@ export default StyleSheet.create({
     },
 
     title: {
-        marginTop: 410,
+        marginTop: sheight * 0.45,
+
 
     },
     titleDark: {
@@ -39,8 +44,9 @@ export default StyleSheet.create({
     },
 
     slider: {
-        marginTop: 65,
-        overflow: 'visible' // for custom animations
+        marginTop: sheight / 7,
+        overflow: 'visible',// for custom animations
+
     },
     sliderContentContainer: {
         paddingVertical: 2,// 

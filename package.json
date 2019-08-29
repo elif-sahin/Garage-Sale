@@ -8,6 +8,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "constants": "0.0.2",
+    "constants-browserify": "^1.0.0",
     "events": "^3.0.0",
     "native-base": "^2.13.4",
     "react": "16.8.6",

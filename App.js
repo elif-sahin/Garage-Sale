@@ -7,62 +7,82 @@ import { ListItem } from "react-native-elements";
 import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
 import LinearGradient from 'react-native-linear-gradient'; // Only if no expo
 import EventEmitter from "./src/EventEmitter"
+import { EMLINK } from 'constants';
 
 let markers = [
   {
     key: 1,
     latitude: 37.69824,
     longitude: -122.4324,
-    isSelected: false
+    description: 'Zurna dürüm bulunur.',
+    title: 'Zurnacı',
+    photo: require('./images/zurna.png')
+
 
   }, {
     key: 2,
     latitude: 37.68825,
     longitude: -122.4324,
-    isSelected: false
+    description: 'Los Angelesın en kral tornacısı',
+    title: 'Tornacı',
+    photo: require('./images/torna.png')
+
 
   },
   {
     key: 3,
     latitude: 37.67825,
     longitude: -122.4324,
-    isSelected: false
+    description: 'Overlok makinesi ayağınıza gelmiyor, buradayız.',
+    title: 'Overlokçu',
+    photo: require('./images/overlok.png')
+
 
   }
 ]
 
 let mapView = null;
+const selectedPin = require('./images/marker-selected.png');
+const pin = require('./images/marker.png');
 
 
 export default class GarageMap extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
-      markers,
+      markers, selectedMarkerIndex: 0
     };
 
   }
   goMarker = (key) => {
-    EventEmitter.emit('goMarker', key);
+
+    this.setState({ selectedMarkerIndex: key - 1 }, () => {
+      EventEmitter.emit('goMarker', key);
+      //this.forceUpdate()
+    });
+
+
   }
+
+
 
 
 
   componentDidMount() {
     console.log("did mounth bas calisti");
-    EventEmitter.on('selectMarker', function (selectMarker) {
+    EventEmitter.on('selectMarker', (selectMarker) => {
       console.log("event emit");
       //console.log("this.map: ", mapView)
+      this.setState({ selectedMarkerIndex: selectMarker })
+
       mapView.animateCamera({
         center: {
           latitude: markers[selectMarker].latitude,
           longitude: markers[selectMarker].longitude,
         }
       });
-
     })
-
-    console.log("event emdid mount sont");
   }
 
   render() {
@@ -90,13 +110,13 @@ export default class GarageMap extends Component {
                 longitude: elm.longitude,
                 latitude: elm.latitude
               }}
-              onPress={() => this.goMarker(elm.key)}
+              title={elm.title}
+              description={elm.description}
+              onPress={() => { this.goMarker(elm.key) }}
+              image={this.state.selectedMarkerIndex === (elm.key - 1) ? selectedPin : pin}
+
             >
-              <MapView.Callout tooltip style={styles.customView}>
-                <View style={styles.calloutText}>
-                  <Text>{elm.key}{"\n"}</Text>
-                </View>
-              </MapView.Callout>
+
             </Marker.Animated>
           })}
         </MapView>
@@ -113,6 +133,7 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
   },
+
 
 });
 

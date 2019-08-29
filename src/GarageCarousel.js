@@ -13,7 +13,7 @@ import { scrollInterpolators, animatedStyles } from './animations';
 const swidth = Dimensions.get('window').width;
 const sheight = Dimensions.get('window').height;
 let carousel = null;
-const SLIDER_1_FIRST_ITEM = 1;
+const SLIDER_1_FIRST_ITEM = 0;
 export default class Item extends Component {
 
   constructor(props) {
@@ -27,6 +27,7 @@ export default class Item extends Component {
 
   selectMarker = (item) => {
     EventEmitter.emit('selectMarker', item);
+
   }
   componentDidMount() {
     EventEmitter.on('goMarker', function (key) {
@@ -90,54 +91,6 @@ export default class Item extends Component {
     );
   }
 
-  renderItem = ({ item, index }) => {
-    return (
-
-      < View >
-
-        <Animated.ScrollView scrollEventThrottle={5}
-          showsVerticalScrollIndicator={false}
-          style={{ zIndex: -1 }}
-          onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: this.scrollY } } }], { useNativeDriver: true })}>
-
-          <Animated.View style={{
-            height: sheight * 0.8,
-            transform: [{ translateY: Animated.multiply(this.scrollY, 0.5) }]
-          }}>
-
-          </Animated.View>
-          <TouchableOpacity
-            onPress={() => {
-              this.selectMarker(index)
-            }}
-          >
-            <Animated.View style={{ ...styles.item }} >
-              <Text style={styles.text}>{item.key}  </Text>
-              <Text>Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı. Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.Uzunca bir açıklama yazısı.</Text>
-            </Animated.View>
-          </TouchableOpacity>
-          <View style={{ position: 'absolute', height: sheight, width: swidth, zIndex: -2 }}>
-            <LinearGradient
-              colors={['rgba(245,245,245,0)', 'rgba(245,245,245,0.35)', 'rgba(245,245,245,1)']}
-              locations={[0, 0.3, 1]}
-              style={StyleSheet.absoluteFill} />
-          </View>
-
-          <View style={{
-            transform: [{ translateY: -100 }],
-            width: '100%',
-
-            backgroundColor: 'transparent'
-          }}>
-            <View style={{ ...StyleSheet.absoluteFill, top: 100, backgroundColor: 'rgb(245,245,245)' }} />
-
-          </View>
-        </Animated.ScrollView>
-
-      </View >
-
-    )
-  };
   render() {
     const example1 = this.mainExample(1, ' dots');
     return (

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { ParallaxImage } from 'react-native-snap-carousel';
 import styles from './SliderEntry.style';
 
+
 export default class SliderEntry extends Component {
 
     static propTypes = {
@@ -14,11 +15,11 @@ export default class SliderEntry extends Component {
     };
 
     get image() {
-        const { data: { illustration }, parallax, parallaxProps, even } = this.props;
+        const { data: { photo }, parallax, parallaxProps, even } = this.props;
 
         return parallax ? (
             <ParallaxImage
-                source={require('../images/illustration.png')}
+                source={photo}
                 containerStyle={[styles.imageContainer, even ? styles.imageContainerEven : {}]}
                 style={styles.image}
                 parallaxFactor={0.35}
@@ -28,21 +29,21 @@ export default class SliderEntry extends Component {
             />
         ) : (
                 <Image
-                    source={require('../images/illustration.png')}
+                    source={photo}
                     style={styles.image}
                 />
             );
     }
 
     render() {
-        const { data: { key, latitude, longitude }, even } = this.props;
+        const { data: { title, description }, even } = this.props;
 
-        const uppercaseTitle = key ? (
+        const uppercaseTitle = title ? (
             <Text
                 style={[styles.title, even ? styles.titleEven : {}]}
                 numberOfLines={2}
             >
-                {key}
+                {title}
             </Text>
         ) : false;
 
@@ -63,7 +64,7 @@ export default class SliderEntry extends Component {
                         style={[styles.subtitle, even ? styles.subtitleEven : {}]}
                         numberOfLines={2}
                     >
-                        {latitude}, {longitude}
+                        {description}
                     </Text>
                 </View>
             </TouchableOpacity>
