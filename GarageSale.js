@@ -6,58 +6,30 @@ import Item from './src/GarageCarousel.js';
 import { ListItem } from "react-native-elements";
 import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
 import LinearGradient from 'react-native-linear-gradient'; // Only if no expo
-import EventEmitter from "./src/EventEmitter"
+import EventEmitter from "./src/EventEmitter";
 import { EMLINK } from 'constants';
 
-let markers = [
-  {
-    key: 1,
-    latitude: 37.69824,
-    longitude: -122.4324,
-    description: 'Zurna dürüm bulunur.',
-    title: 'Zurnacı',
-    photo: require('./images/zurna.png')
-
-
-  }, {
-    key: 2,
-    latitude: 37.68825,
-    longitude: -122.4324,
-    description: 'Los Angelesın en kral tornacısı',
-    title: 'Tornacı',
-    photo: require('./images/torna.png')
-
-
-  },
-  {
-    key: 3,
-    latitude: 37.67825,
-    longitude: -122.4324,
-    description: 'Overlok makinesi ayağınıza gelmiyor, buradayız.',
-    title: 'Overlokçu',
-    photo: require('./images/overlok.png')
-
-
-  }
-]
+import { fetchData } from './src/redux/actions/garageActions.js';
+import { connect } from "react-redux";
+import propTypes from "prop-types";
 
 let mapView = null;
 const selectedPin = require('./images/marker-selected.png');
 const pin = require('./images/marker.png');
-
-
-export default class GarageMap extends Component {
+let mounth = true;
+class GarageSale extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      markers, selectedMarkerIndex: 0
+      selectedMarkerIndex: 0,
     };
 
   }
+
   goMarker = (key) => {
 
-    this.setState({ selectedMarkerIndex: key - 1 }, () => {
+    this.setState({ selectedMarkerIndex: key }, () => {
       EventEmitter.emit('goMarker', key);
       //this.forceUpdate()
     });
@@ -65,11 +37,12 @@ export default class GarageMap extends Component {
 
   }
 
-
-
-
-
   componentDidMount() {
+    if (mounth) {
+      this.props.fetchData();
+    }
+
+
     console.log("did mounth bas calisti");
     EventEmitter.on('selectMarker', (selectMarker) => {
       console.log("event emit");
@@ -78,14 +51,20 @@ export default class GarageMap extends Component {
 
       mapView.animateCamera({
         center: {
-          latitude: markers[selectMarker].latitude,
-          longitude: markers[selectMarker].longitude,
+          latitude: this.props.markers[selectMarker].latitude,
+          longitude: this.props.markers[selectMarker].longitude,
         }
       });
     })
   }
 
+  componentWillUnmount() {
+    mounth = false;
+    console.log("mooooooooooooooooooooooooouuuuuuuuuuuuuuunnnnnnnnnnnnnntttttttttttttttttt" + mounth);
+    EventEmitter.removeAllListeners();
+  }
   render() {
+    console.log(this.props.markers);
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <MapView
@@ -103,24 +82,28 @@ export default class GarageMap extends Component {
           }}
 
         >
-          {this.state.markers.map(elm => {
+          {this.props.markers.map(elm => {
             return <Marker.Animated
-              key={elm.key}
+              key={elm._id}
               coordinate={{
                 longitude: elm.longitude,
                 latitude: elm.latitude
               }}
               title={elm.title}
               description={elm.description}
-              onPress={() => { this.goMarker(elm.key) }}
-              image={this.state.selectedMarkerIndex === (elm.key - 1) ? selectedPin : pin}
+              onPress={() => { this.goMarker(this.props.markers.indexOf(elm)) }}
+              image={this.state.selectedMarkerIndex === (this.props.markers.indexOf(elm)) ? selectedPin : pin}
 
             >
 
             </Marker.Animated>
           })}
         </MapView>
-        <Item markers={this.state.markers}></Item>
+
+        <Item markers={this.props.markers}></Item>
+
+
+
       </View>
     );
 
@@ -129,6 +112,11 @@ export default class GarageMap extends Component {
   }
 }
 
+GarageSale.propTypes = {
+  fetchData: propTypes.func.isRequired,
+  markers: propTypes.array.isRequired
+};
+
 const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
@@ -136,6 +124,10 @@ const styles = StyleSheet.create({
 
 
 });
-
-
+const mapStateToprops = state => {
+  return {
+    markers: state.markers
+  }
+}
+export default connect(mapStateToprops, { fetchData })(GarageSale);
 

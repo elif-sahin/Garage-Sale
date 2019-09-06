@@ -22,18 +22,20 @@ export default class Item extends Component {
 
   }
 
-  scrollY = new Animated.Value(0)
-  //headerY = Animated.multiply(Animated.diffClamp(this.scrollY, 0, 56), -1)
 
   selectMarker = (item) => {
     EventEmitter.emit('selectMarker', item);
 
   }
   componentDidMount() {
-    EventEmitter.on('goMarker', function (key) {
+    EventEmitter.on('goMarker', function (key) {// marker ustune tikalndiginda
       console.log("this.map: ", key);
-      carousel.snapToItem(key - 1, animated = true, fireCallback = true);
+      carousel.snapToItem(key, animated = true, fireCallback = true);
     })
+  }
+
+  componentWillUnmount() {
+    EventEmitter.removeAllListeners();
   }
 
   _renderItemWithParallax({ item, index }, parallaxProps) {

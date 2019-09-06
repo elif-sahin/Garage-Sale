@@ -54,6 +54,7 @@ export default StyleSheet.create({
     },
     paginationContainer: {
         paddingVertical: 8,
+        width: swidth
 
     },
     paginationDot: {
