@@ -1,17 +1,11 @@
 import React, { Component } from 'react';
-import { Text, View, FlatList, StyleSheet, Animated, TouchableOpacity, Dimensions, Platform, ScrollView, StatusBar, SafeAreaView } from 'react-native';
+import { Text, View, Dimensions } from 'react-native';
 import EventEmitter from "./EventEmitter"
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import LinearGradient from 'react-native-linear-gradient'
-import { Body, Card, CardItem, Header, Left, Thumbnail, Title } from 'native-base'
 import { sliderWidth, itemWidth } from './SliderEntry.style';
 import SliderEntry from './SliderEntry';
 import styles, { colors } from './index.style';
-import { ENTRIES1, ENTRIES2 } from './entries';
-import { scrollInterpolators, animatedStyles } from './animations';
 
-const swidth = Dimensions.get('window').width;
-const sheight = Dimensions.get('window').height;
 let carousel = null;
 const SLIDER_1_FIRST_ITEM = 0;
 export default class Item extends Component {
@@ -28,8 +22,7 @@ export default class Item extends Component {
 
   }
   componentDidMount() {
-    EventEmitter.on('goMarker', function (key) {// marker ustune tikalndiginda
-      console.log("this.map: ", key);
+    EventEmitter.on('goMarker', function (key) {
       carousel.snapToItem(key, animated = true, fireCallback = true);
     })
   }

@@ -1,6 +1,5 @@
 import { getInputRangeFromIndexes } from 'react-native-snap-carousel';
 
-// Photo album effect
 function scrollInterpolator1(index, carouselProps) {
     const range = [3, 2, 1, 0, -1];
     const inputRange = getInputRangeFromIndexes(range, index, carouselProps);

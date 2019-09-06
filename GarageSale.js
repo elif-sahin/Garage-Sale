@@ -1,14 +1,8 @@
-import React, { Component, useRef } from 'react';
-import { Text, FlatList, View, StyleSheet, Animated, TouchableHighlight } from 'react-native';
+import React, { Component } from 'react';
+import { View, StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import Modalize from 'react-native-modalize';
 import Item from './src/GarageCarousel.js';
-import { ListItem } from "react-native-elements";
-import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
-import LinearGradient from 'react-native-linear-gradient'; // Only if no expo
 import EventEmitter from "./src/EventEmitter";
-import { EMLINK } from 'constants';
-
 import { fetchData } from './src/redux/actions/garageActions.js';
 import { connect } from "react-redux";
 import propTypes from "prop-types";
@@ -31,7 +25,7 @@ class GarageSale extends Component {
 
     this.setState({ selectedMarkerIndex: key }, () => {
       EventEmitter.emit('goMarker', key);
-      //this.forceUpdate()
+
     });
 
 
@@ -41,12 +35,8 @@ class GarageSale extends Component {
     if (mounth) {
       this.props.fetchData();
     }
-
-
-    console.log("did mounth bas calisti");
     EventEmitter.on('selectMarker', (selectMarker) => {
-      console.log("event emit");
-      //console.log("this.map: ", mapView)
+
       this.setState({ selectedMarkerIndex: selectMarker })
 
       mapView.animateCamera({
@@ -60,7 +50,6 @@ class GarageSale extends Component {
 
   componentWillUnmount() {
     mounth = false;
-    console.log("mooooooooooooooooooooooooouuuuuuuuuuuuuuunnnnnnnnnnnnnntttttttttttttttttt" + mounth);
     EventEmitter.removeAllListeners();
   }
   render() {

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import GarageSale from "../GarageSale.js";
-
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
