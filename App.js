@@ -42,15 +42,14 @@ export default class GarageMap extends Component {
     };
 
   }
+
   goMarker = (key) => {
     EventEmitter.emit('goMarker', key);
   }
 
   componentDidMount() {
-    console.log("did mounth bas calisti");
+
     EventEmitter.on('selectMarker', function (selectMarker) {
-      console.log("event emit");
-      //console.log("this.map: ", mapView)
       mapView.animateCamera({
         center: {
           latitude: markers[selectMarker].latitude,
@@ -60,7 +59,7 @@ export default class GarageMap extends Component {
 
     })
 
-    console.log("event emdid mount sont");
+
   }
 
   render() {

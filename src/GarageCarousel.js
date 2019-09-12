@@ -22,16 +22,13 @@ export default class Item extends Component {
     EventEmitter.emit('selectMarker', item);
 
   }
+
+
   componentDidMount() {
-
     EventEmitter.on('goMarker', function (key) {
-
       console.log("this.map: ", key);
       carousel.snapToItem(key - 1, animated = true, fireCallback = true);
-
     })
-
-    console.log("event emdid mount sont");
   }
 
   renderItem = ({ item, index }) => {
