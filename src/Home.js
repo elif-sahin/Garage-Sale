@@ -9,8 +9,13 @@ import garageReducer from './redux/reducers/garageReducers.js';
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore)
 const store = createStoreWithMiddleware(garageReducer);
 
-export default class App extends Component {
+
+export default class Home extends Component {
+    constructor(props) {
+        super(props);
+    }
     render() {
+
         return (
             <Provider store={store}>
                 <GarageSale />

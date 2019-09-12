@@ -2,8 +2,11 @@
  * @format
  */
 
-import { AppRegistry } from 'react-native';
-import App from './src/App'; //'./works/App1' './application/App'
+import { AppRegistry, StyleSheet, Text, View, Navigator } from 'react-native';
+import GarApp from './src/Home'; //'./works/App1' './application/App'
+import Login from "./src/Login";
 import { name as appName } from './app.json';
 
-AppRegistry.registerComponent(appName, () => App);
+
+
+AppRegistry.registerComponent(appName, () => GarApp);
